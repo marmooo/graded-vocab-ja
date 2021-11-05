@@ -111,6 +111,8 @@ async function parseLemma() {
     const count = parseInt(arr[1]);
     const parsed = await mecab.parse(lemma);
     if (parsed.length != 1) continue;
+    if (parsed[0].feature == "接頭詞") continue;
+    if (parsed[0].featureDetails[0] == "接尾") continue;
     if (parsed[0].featureDetails[0] == "固有名詞") continue;
     const originalForm = parsed[0].originalForm;
     if (originalForm == "*") continue;
