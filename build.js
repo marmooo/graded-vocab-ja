@@ -44,7 +44,7 @@ function getGrade(word) {
   const grades = chars.map((x) => {
     if (x in kanjiGrade) {
       return kanjiGrade[x];
-    } else if (/[\u4E00-\u9FFF]/.test(x)) {
+    } else if (/[\u4E00-\u9FFF々]/.test(x)) {
       return 10;
     } else {
       return 0;
@@ -81,7 +81,7 @@ async function loadSudachiFilter() {
       const lemma = arr[0];
       const pos1 = arr[5];
       const pos2 = arr[6];
-      if (/[\u4E00-\u9FFF]/.test(lemma)) {
+      if (/[\u4E00-\u9FFF々]/.test(lemma)) {
         if (pos1 == "補助記号" || pos2 == "固有名詞") {
           dict[lemma] = true;
         }
@@ -106,7 +106,7 @@ async function parseLemma() {
     if (lemma in sudachiFilter) continue;
     if (lemma in inappropriateWordsJa) continue;
     if (lemma.length == 1) continue; // 一文字の語彙は無視
-    if (!/^[ぁ-んァ-ヴ\u4E00-\u9FFF ]+$/.test(lemma)) continue; // 数字記号は無視
+    if (!/^[ぁ-んァ-ヴ\u4E00-\u9FFF々 ]+$/.test(lemma)) continue; // 数字記号は無視
     const count = parseInt(arr[1]);
     const parsed = await mecab.parse(lemma);
     if (parsed.length != 1) continue;
