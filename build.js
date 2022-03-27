@@ -1,5 +1,4 @@
 import { readLines } from "https://deno.land/std/io/mod.ts";
-import { MeCab } from "https://deno.land/x/deno_mecab/mod.ts";
 
 const w1_ = Array.from(
   "一右雨円王音下火花貝学気九休玉金空月犬見五口校左三山子四糸字耳七車手十出女小上森人水正生青夕石赤千川先早草足村大男竹中虫町天田土二日入年白八百文木本名目立力林六",
@@ -81,11 +80,13 @@ async function loadSudachiFilter() {
       const lemma = arr[0];
       const pos1 = arr[5];
       const pos2 = arr[6];
-      if (/[一-龠々]/.test(lemma)) {
-        if (pos1 == "補助記号" || pos2 == "固有名詞") {
-          dict[lemma] = true;
-        }
-      }
+      const form = arr[10];
+      const abc = arr[14];
+      if (pos1 == "補助記号") continue;
+      if (pos2 == "固有名詞") continue;
+      if (abc != "A") continue;
+      if (form != "*" && !form.includes("終止形")) continue;
+      dict[lemma] = true;
     }
   }
   return dict;
@@ -103,22 +104,15 @@ async function parseLemma() {
     if (!line) continue;
     const arr = line.split(/\s/);
     const lemma = arr[0];
-    if (lemma in sudachiFilter) continue;
+    if (lemma in sudachiFilter === false) continue;
     if (lemma in inappropriateWordsJa) continue;
     if (lemma.length == 1) continue; // 一文字の語彙は無視
     if (!/^[ぁ-んァ-ヴ一-龠々 ]+$/.test(lemma)) continue; // 数字記号は無視
     const count = parseInt(arr[1]);
-    const parsed = await mecab.parse(lemma);
-    if (parsed.length != 1) continue;
-    if (parsed[0].feature == "接頭詞") continue;
-    if (parsed[0].featureDetails[0] == "接尾") continue;
-    if (parsed[0].featureDetails[0] == "固有名詞") continue;
-    const originalForm = parsed[0].originalForm;
-    if (originalForm == "*") continue;
-    if (originalForm in dict) {
-      dict[originalForm] += count;
+    if (lemma in dict) {
+      dict[lemma] += count;
     } else {
-      dict[originalForm] = count;
+      dict[lemma] = count;
     }
   }
   const arr = Object.entries(dict);
@@ -143,7 +137,6 @@ function splitGrade(arr) {
 }
 
 const outDir = "dist";
-const mecab = new MeCab(["mecab"]);
 const result = await parseLemma();
 Deno.writeTextFile(
   `${outDir}/all.csv`,
