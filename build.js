@@ -107,7 +107,7 @@ async function parseLemma() {
     if (lemma in sudachiFilter === false) continue;
     if (lemma in inappropriateWordsJa) continue;
     if (lemma.length == 1) continue; // 一文字の語彙は無視
-    if (!/^[ぁ-んァ-ヴ一-龠々 ]+$/.test(lemma)) continue; // 数字記号は無視
+    if (!/^[ぁ-んァ-ヴー一-龠々 ]+$/.test(lemma)) continue; // 数字記号は無視
     const count = parseInt(arr[1]);
     if (lemma in dict) {
       dict[lemma] += count;
