@@ -1,4 +1,4 @@
-import ejs from "https://esm.sh/ejs@3.1.8";
+import ejs from "npm:ejs@3.1.9";
 
 const fileNames = ["h", "k", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 const dirNames = [
