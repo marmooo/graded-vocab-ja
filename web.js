@@ -1,4 +1,4 @@
-import ejs from "npm:ejs@3.1.9";
+import * as Eta from "npm:eta@2.2.0";
 
 const fileNames = ["h", "k", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 const dirNames = [
@@ -78,12 +78,11 @@ for (let i = 0; i < dirNames.length; i++) {
   });
   const dir = "src/" + dirNames[i];
   Deno.mkdirSync(dir, { recursive: true });
-  const html = ejs.render(template, {
+  const html = Eta.render(template, {
     num: num.toLocaleString("ja-JP"),
-    words: words,
     grade: fileNames[i],
     gradeName: gradeNames[i],
-    toContent: toContent,
+    content: toContent(words),
     selected: selected,
   });
   Deno.writeTextFileSync(dir + "/index.html", html);
