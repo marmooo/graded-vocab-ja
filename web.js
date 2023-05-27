@@ -69,7 +69,7 @@ function selected(grade, index) {
 
 const allVocabs = Deno.readTextFileSync(`dist/all.csv`);
 const num = allVocabs.trimEnd().split("\n").length;
-const template = Deno.readTextFileSync("page.ejs");
+const template = Deno.readTextFileSync("page.eta");
 for (let i = 0; i < dirNames.length; i++) {
   const words = []
   const text = Deno.readTextFileSync(`dist/${fileNames[i]}.csv`);
