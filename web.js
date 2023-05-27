@@ -1,4 +1,3 @@
-import { readLines } from "https://deno.land/std/io/mod.ts";
 import ejs from "https://esm.sh/ejs@3.1.8";
 
 const fileNames = ["h", "k", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -68,18 +67,19 @@ function selected(grade, index) {
   }
 }
 
+const allVocabs = Deno.readTextFileSync(`dist/all.csv`);
+const num = allVocabs.trimEnd().split("\n").length;
 const template = Deno.readTextFileSync("page.ejs");
 for (let i = 0; i < dirNames.length; i++) {
-  const words = [];
-  const fileReader = await Deno.open(
-    `dist/${fileNames[i]}.csv`,
-  );
-  for await (const line of readLines(fileReader)) {
+  const words = []
+  const text = Deno.readTextFileSync(`dist/${fileNames[i]}.csv`);
+  text.trimEnd().split("\n").forEach((line) => {
     words.push(line.split(",")[0]);
-  }
+  });
   const dir = "src/" + dirNames[i];
   Deno.mkdirSync(dir, { recursive: true });
   const html = ejs.render(template, {
+    num: num.toLocaleString("ja-JP"),
     words: words,
     grade: fileNames[i],
     gradeName: gradeNames[i],
