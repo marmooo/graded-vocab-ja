@@ -1,4 +1,4 @@
-import * as Eta from "npm:eta@2.2.0";
+import { Eta } from "https://deno.land/x/eta@v3.1.0/src/index.ts";
 
 const fileNames = ["h", "k", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 const dirNames = [
@@ -67,9 +67,9 @@ function selected(grade, index) {
   }
 }
 
+const eta = new Eta({ views: ".", cache: true });
 const allVocabs = Deno.readTextFileSync(`dist/all.csv`);
 const num = allVocabs.trimEnd().split("\n").length;
-const template = Deno.readTextFileSync("page.eta");
 for (let i = 0; i < dirNames.length; i++) {
   const words = []
   const text = Deno.readTextFileSync(`dist/${fileNames[i]}.csv`);
@@ -78,7 +78,7 @@ for (let i = 0; i < dirNames.length; i++) {
   });
   const dir = "src/" + dirNames[i];
   Deno.mkdirSync(dir, { recursive: true });
-  const html = Eta.render(template, {
+  const html = eta.render("page.eta", {
     num: num.toLocaleString("ja-JP"),
     grade: fileNames[i],
     gradeName: gradeNames[i],
