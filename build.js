@@ -1,6 +1,22 @@
 import { Eta } from "https://deno.land/x/eta@v3.1.1/src/index.ts";
 
-const fileNames = ["h", "k", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+const fileNames = [
+  "h",
+  "k",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+];
 const dirNames = [
   "ひらがな",
   "カタカナ",
@@ -12,8 +28,10 @@ const dirNames = [
   "小6",
   "中2",
   "中3",
+  "高校",
   "常用",
-  "常用外",
+  "準1級",
+  "1級",
 ];
 const gradeNames = [
   "ひらがな",
@@ -26,8 +44,10 @@ const gradeNames = [
   "小学6年生",
   "中学1〜2年生",
   "中学3年生",
+  "高校生",
   "常用漢字",
-  "常用外漢字",
+  "漢検準1級",
+  "漢検1級",
 ];
 
 function toContent(words) {
@@ -71,7 +91,7 @@ const eta = new Eta({ views: ".", cache: true });
 const allVocabs = Deno.readTextFileSync(`dist/all.csv`);
 const num = allVocabs.trimEnd().split("\n").length;
 for (let i = 0; i < dirNames.length; i++) {
-  const words = []
+  const words = [];
   const text = Deno.readTextFileSync(`dist/${fileNames[i]}.csv`);
   text.trimEnd().split("\n").forEach((line) => {
     words.push(line.split(",")[0]);
