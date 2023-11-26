@@ -44,7 +44,7 @@ async function loadSudachiFilter() {
 }
 
 async function parseLemma() {
-  const filterRegexp = /^[ぁ-ゔァ-ヴー\u3400-\u9FFF\uF900-\uFAFF\u{20000}-\u{2FFFF}々]+$/u;
+  const filterRegexp = /^[ぁ-ゔァ-ヴー\u3400-\u9FFF\uF900-\uFAFF\u{20000}-\u{2FFFF}]+$/u;
   const inappropriateWordsJa = await loadInappropriateWordsJa();
   const sudachiFilter = await loadSudachiFilter();
 
@@ -74,15 +74,17 @@ async function parseLemma() {
 function splitByGrade(arr) {
   const jkat = new Kanji(JKAT);
   const graded = new Array(JKAT.length + 2);
-  for (let grade = 0; grade <= JKAT.length + 1; grade++) {
+  for (let grade = 0; grade <= JKAT.length; grade++) {
     graded[grade] = [];
   }
   for (const [lemma, count] of arr) {
-    const kanji = lemma.replaceAll(/[ぁ-ゔァ-ヴー]/g, "");
-    if (kanji.length == 0) {
+    const kanjis = lemma.replaceAll(/[ぁ-ゔァ-ヴー]/g, "");
+    if (kanjis.length == 0) {
       graded[0].push([lemma, count]);
     } else {
-      const grade = jkat.getGrade(kanji) + 1;
+      const grades = Array.from(kanjis).map((kanji) => jkat.getGrade(kanji));
+      if (grades.includes(-1)) continue;
+      const grade = jkat.getGrade(kanjis) + 1;
       graded[grade].push([lemma, count]);
     }
   }
