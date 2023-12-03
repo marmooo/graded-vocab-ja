@@ -48,25 +48,27 @@ async function parseLemma() {
   const sudachiFilter = await loadSudachiFilter();
 
   const dict = {};
-  const fileReader = await Deno.open(
-    "nwc2010-ngrams/word/over999/1gms/1gm-0000",
-  );
-  for await (const line of readLines(fileReader)) {
-    if (!line) continue;
-    const arr = line.split(/\s/);
-    const lemma = arr[0];
-    if (lemma in sudachiFilter === false) continue;
-    if (lemma in inappropriateWordsJa) continue;
-    if (lemma.length == 1) continue; // 一文字の語彙は無視
-    if (!filterRegexp.test(lemma)) continue; // 数字記号は無視
-    const kanjis = lemma.replaceAll(/[ぁ-ゔァ-ヴー]/g, "");
-    const grades = Array.from(kanjis).map((kanji) => jkat.getGrade(kanji));
-    if (grades.includes(-1)) continue; // サポート外漢字を含む場合は無視
-    const count = parseInt(arr[1]);
-    if (lemma in dict) {
-      dict[lemma] += count;
-    } else {
-      dict[lemma] = count;
+  for (let i = 1; i <= 7; i++) {
+    const fileReader = await Deno.open(
+      `nwc2010-ngrams/word/over999/${i}gms/${i}gm-0000`,
+    );
+    for await (const line of readLines(fileReader)) {
+      if (!line) continue;
+      const arr = line.split(/\s/);
+      const lemma = arr.slice(0, -1).join("");
+      if (lemma in sudachiFilter === false) continue;
+      if (lemma in inappropriateWordsJa) continue;
+      if (lemma.length == 1) continue; // 一文字の語彙は無視
+      if (!filterRegexp.test(lemma)) continue; // 数字記号は無視
+      const kanjis = lemma.replaceAll(/[ぁ-ゔァ-ヴー]/g, "");
+      const grades = Array.from(kanjis).map((kanji) => jkat.getGrade(kanji));
+      if (grades.includes(-1)) continue; // サポート外漢字を含む場合は無視
+      const count = parseInt(arr.slice(-1));
+      if (lemma in dict) {
+        dict[lemma] += count;
+      } else {
+        dict[lemma] = count;
+      }
     }
   }
   const arr = Object.entries(dict).sort((a, b) => b[1] - a[1]);
