@@ -19,7 +19,6 @@ async function loadSudachiFilter() {
   const paths = [
     "SudachiDict/src/main/text/small_lex.csv",
     "SudachiDict/src/main/text/core_lex.csv",
-    "SudachiDict/src/main/text/notcore_lex.csv",
   ];
   for (const path of paths) {
     const fileReader = await Deno.open(path);
@@ -73,7 +72,7 @@ async function parseLemma() {
 
 function splitByGrade(arr) {
   const jkat = new Kanji(JKAT);
-  const graded = new Array(JKAT.length + 2);
+  const graded = new Array(JKAT.length + 1);
   for (let grade = 0; grade <= JKAT.length; grade++) {
     graded[grade] = [];
   }
