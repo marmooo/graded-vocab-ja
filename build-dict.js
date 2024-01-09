@@ -1,5 +1,5 @@
 import { readLines } from "https://deno.land/std/io/mod.ts";
-import { Kanji, JKAT } from "npm:@marmooo/kanji@0.0.5";
+import { Kanji, JKAT } from "npm:@marmooo/kanji@0.0.8";
 
 async function loadInappropriateWordsJa() {
   const dict = {};
