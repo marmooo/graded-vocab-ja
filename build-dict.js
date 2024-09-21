@@ -1,5 +1,5 @@
 import { TextLineStream } from "jsr:@std/streams/text-line-stream";
-import { Kanji, JKAT } from "npm:@marmooo/kanji@0.0.8";
+import { JKAT, Kanji } from "npm:@marmooo/kanji@0.0.8";
 
 function getLineStream(file) {
   return file.readable
@@ -47,7 +47,8 @@ async function loadSudachiFilter() {
 }
 
 async function parseLemma() {
-  const filterRegexp = /^[ぁ-ゔァ-ヴー\u3400-\u9FFF\uF900-\uFAFF\u{20000}-\u{37FFF}]+$/u;
+  const filterRegexp =
+    /^[ぁ-ゔァ-ヴー\u3400-\u9FFF\uF900-\uFAFF\u{20000}-\u{37FFF}]+$/u;
   const inappropriateWordsJa = await loadInappropriateWordsJa();
   const sudachiFilter = await loadSudachiFilter();
 
