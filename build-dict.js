@@ -39,7 +39,11 @@ async function loadSudachiFilter() {
       if (pos1 == "補助記号") continue;
       if (pos2 == "固有名詞") continue;
       if (abc != "A") continue;
-      if (form != "*" && !form.includes("終止形")) continue;
+      if (form != "*") {
+        if (!form.includes("終止形")) continue;
+        if (form.includes("促音便")) continue;
+        if (form.includes("撥音便")) continue;
+      }
       dict[lemma] = true;
     }
   }
