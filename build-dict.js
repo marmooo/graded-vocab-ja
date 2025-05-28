@@ -120,9 +120,9 @@ const kana = [];
 const file = await Deno.open("dist/0.csv");
 for await (const line of getLineStream(file)) {
   const [word, count] = line.split(",");
-  if (/[ぁ-ゔー]/.test(word)) {
+  if (/^[ぁ-ゔー]+$/.test(word)) {
     hira.push([word, count]);
-  } else if (/[ァ-ヴー]/.test(word)) {
+  } else if (/^[ァ-ヴー]+$/.test(word)) {
     kana.push([word, count]);
   }
 }
