@@ -37,6 +37,9 @@ async function loadSudachiFilter() {
       const abc = arr[14];
       if (leftId == "-1") continue;
       if (pos1 == "補助記号") continue;
+      if (pos1 == "記号") continue;
+      if (pos1 == "接頭辞") continue;
+      if (pos1 == "接尾辞") continue;
       if (pos2 == "固有名詞") continue;
       if (abc != "A") continue;
       if (form != "*") {
